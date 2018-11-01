@@ -115,6 +115,7 @@ public class ManufacturerFragment extends Fragment {
             case SUCCESS:
                 ProgressDialogUtils.dismissProgressDialog();
                 if (apiResponse.data != null) {
+                    ToastUtils.getInstance().showToast(getContext(), "Success", ToastDuration.LONG);
                     renderManufacturersResponse(apiResponse.data);
                 }
                 break;
