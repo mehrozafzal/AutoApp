@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize">
+
+        <ImageView
+            android:id="@+id/toolbar_backBtn"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:tint="@color/colorWhite"
+            android:src="@drawable/ic_arrow_back_white"
+            android:contentDescription="@null"/>
+        <TextView
+            fontPath="fonts/title_font.otf"
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/app_name"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/text_title"
+            tools:ignore="MissingPrefix" />
+
+    </android.support.v7.widget.Toolbar>
+
+</LinearLayout>

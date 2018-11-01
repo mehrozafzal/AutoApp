@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorGrayDark">
+
+    <ImageView
+        android:id="@+id/toolbar_backBtn"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_margin="10dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="8dp"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_arrow_back_white"
+        android:tint="@color/colorWhite"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <LinearLayout
+        android:id="@+id/fragmentSummary_manufactureLayout"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="@+id/view2"
+        app:layout_constraintStart_toStartOf="@+id/view2"
+        app:layout_constraintTop_toTopOf="@+id/view2">
+
+        <ImageView
+            android:id="@+id/fragmentSummary_manufactureImage"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/purple_circle_drawable" />
+
+        <TextView
+            android:id="@+id/fragmentSummary_manufactureTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:fontFamily="@string/font_family_medium"
+            android:text="@string/dummy_manufacturer_name"
+            android:textSize="@dimen/text_medium" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/fragmentSummary_modelLayout"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="@+id/fragmentSummary_manufactureLayout"
+        app:layout_constraintStart_toStartOf="@+id/fragmentSummary_manufactureLayout"
+        app:layout_constraintTop_toBottomOf="@+id/fragmentSummary_manufactureLayout">
+
+        <ImageView
+            android:id="@+id/fragmentSummary_modelImage"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/orange_circle_drawable" />
+
+        <TextView
+            android:id="@+id/fragmentSummary_modelText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:fontFamily="@string/font_family_medium"
+            android:text="@string/dummy_model_name"
+            android:textSize="@dimen/text_medium" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/fragmentSummary_yearLayout"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="@+id/view2"
+        app:layout_constraintEnd_toEndOf="@+id/fragmentSummary_modelLayout"
+        app:layout_constraintStart_toStartOf="@+id/fragmentSummary_modelLayout"
+        app:layout_constraintTop_toBottomOf="@+id/fragmentSummary_modelLayout">
+
+        <ImageView
+            android:id="@+id/fragmentSummary_yearImage"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/blue_circle_drawable" />
+
+        <TextView
+            android:id="@+id/fragmentSummary_yearText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:fontFamily="@string/font_family_medium"
+            android:text="@string/dummy_year_name"
+            android:textSize="@dimen/text_medium" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="341dp"
+        android:layout_height="220dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="titleSize">38sp</dimen>
+    <dimen name="LogoTitleSize">28sp</dimen>
+    <dimen name="FragmentTitleSize">125sp</dimen>
+    <dimen name="back_arrow_left_padding">8dp</dimen>
+
+
+    //Margins
+    <dimen name="margin_mini">1dp</dimen>
+    <dimen name="margin_small">2dp</dimen>
+    <dimen name="margin_medium">4dp</dimen>
+    <dimen name="margin_large">8dp</dimen>
+
+
+    //Text Sizes
+    <dimen name="text_small">15sp</dimen>
+    <dimen name="text_medium">18sp</dimen>
+    <dimen name="text_large">22sp</dimen>
+    <dimen name="text_xLarge">25sp</dimen>
+    <dimen name="text_title">20sp</dimen>
+
+
+</resources>
