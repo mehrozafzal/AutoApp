@@ -20,10 +20,10 @@ import butterknife.ButterKnife;
 public class ModelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
-
     private Context context;
     private LinkedHashMap<String, String> models;
     private OnItemClickListener onItemClickListener;
+
 
     public class MyViewHolder1 extends RecyclerView.ViewHolder {
 
@@ -37,7 +37,7 @@ public class ModelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         public void bindViews(String model, String key) {
             listItem1ModelName.setText(model);
-            itemView.setOnClickListener(view -> onItemClickListener.onItemClicked(model,key));
+            itemView.setOnClickListener(view -> onItemClickListener.onItemClicked(model, key));
         }
     }
 
@@ -45,14 +45,15 @@ public class ModelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         @BindView(R.id.listItem2_modelName)
         TextView listItem2ModelName;
+
         public MyViewHolder2(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }
 
-        public void bindViews(String model,String key) {
+        public void bindViews(String model, String key) {
             listItem2ModelName.setText(model);
-            itemView.setOnClickListener(view -> onItemClickListener.onItemClicked(model,key));
+            itemView.setOnClickListener(view -> onItemClickListener.onItemClicked(model, key));
         }
 
     }
@@ -96,13 +97,13 @@ public class ModelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 ModelAdapter.MyViewHolder1 myViewHolder1 = (ModelAdapter.MyViewHolder1) holder;
                 String model1 = (String) getElementNameByIndex(models, position);
                 String modelKey1 = (String) getElementKeyByIndex(models, position);
-                myViewHolder1.bindViews(model1,modelKey1);
+                myViewHolder1.bindViews(model1, modelKey1);
                 break;
             case ActivityVariables.Adapters.ITEM_TYPE_2:
                 ModelAdapter.MyViewHolder2 myViewHolder2 = (ModelAdapter.MyViewHolder2) holder;
                 String model2 = (String) getElementNameByIndex(models, position);
                 String modelKey2 = (String) getElementKeyByIndex(models, position);
-                myViewHolder2.bindViews(model2,modelKey2);
+                myViewHolder2.bindViews(model2, modelKey2);
                 break;
         }
     }
@@ -120,5 +121,9 @@ public class ModelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         return (map.keySet().toArray())[index];
     }
 
+    public void updateDataSet(LinkedHashMap<String, String> models) {
+        this.models = models;
+        notifyDataSetChanged();
+    }
 }
 

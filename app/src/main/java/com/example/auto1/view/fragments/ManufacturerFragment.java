@@ -35,7 +35,6 @@ import com.example.auto1.viewModel.MainActivityViewModel;
 import com.example.auto1.viewModel.ViewModelFactory;
 import com.google.gson.JsonElement;
 
-import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -71,18 +70,6 @@ public class ManufacturerFragment extends Fragment {
     private int TOTAL_PAGE = 0;
     private int PAGE_SIZE = 15;
     private LinkedHashMap<String, String> manufacturersSet;
-
-//    @Override
-//    public void onCreate(@Nullable Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        layoutManager = new LinearLayoutManager(getContext());
-//        manufacturersSet = new LinkedHashMap<>();
-//
-//        ProgressDialogUtils.initProgressDialog(getContext(), "Fetching Manufacturers...");
-//        mainActivityViewModel = ViewModelProviders.of(this, viewModelFactory).get(MainActivityViewModel.class);
-//        mainActivityViewModel.manufacturerResponse().observe(this, this::consumeResponse);
-//        requestManufacturers(String.valueOf(PAGE), String.valueOf(PAGE_SIZE));
-//    }
 
 
     @Nullable
@@ -128,7 +115,6 @@ public class ManufacturerFragment extends Fragment {
             case SUCCESS:
                 ProgressDialogUtils.dismissProgressDialog();
                 if (apiResponse.data != null) {
-                    ToastUtils.getInstance().showToast(getContext(), "Success", ToastDuration.LONG);
                     renderManufacturersResponse(apiResponse.data);
                 }
                 break;

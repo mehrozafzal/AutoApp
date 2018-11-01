@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -28,9 +29,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @BindView(R.id.activityMain_container)
     FrameLayout activityMainContainer;
     @BindView(R.id.activityMain_toolbar)
-    View toolbar;
+    View content;
     ImageView backImg;
     TextView title;
+    Toolbar toolbar;
 
 
     @Override
@@ -42,8 +44,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void bindViews() {
-        backImg = toolbar.findViewById(R.id.toolbar_backBtn);
-        title = toolbar.findViewById(R.id.toolbar_title);
+        backImg = content.findViewById(R.id.toolbar_backBtn);
+        title = content.findViewById(R.id.toolbar_title);
+        toolbar = content.findViewById(R.id.toolbar_top);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         backImg.setOnClickListener(this);
         selectFragment(FragmentVariables.MANUFACTURER_FRAGMENT, null);
     }
@@ -107,9 +113,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void setToolBarTitle(String titleTxt) {
+        backImg.setVisibility(View.VISIBLE);
+        title.setVisibility(View.VISIBLE);
         if (!titleTxt.equals(""))
             title.setText(titleTxt);
     }
+
+    public void toggleToolbarItemVisibility(int visibility) {
+        if (visibility == View.GONE) {
+            backImg.setVisibility(View.GONE);
+            title.setVisibility(View.GONE);
+        } else {
+            backImg.setVisibility(View.VISIBLE);
+            title.setVisibility(View.VISIBLE);
+        }
+    }
+
 
     @Override
     public void onClick(View view) {
@@ -119,4 +138,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
     }
+
+
 }

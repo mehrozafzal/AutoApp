@@ -8,13 +8,16 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
-import android.widget.ImageView;
 
 import com.example.auto1.MyApplication;
 import com.example.auto1.R;
@@ -34,18 +37,20 @@ import com.example.auto1.viewModel.MainActivityViewModel;
 import com.example.auto1.viewModel.ViewModelFactory;
 import com.google.gson.JsonElement;
 
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
 
 import static com.example.auto1.constants.ActivityVariables.Keys.SUMMARY_OBJ_KEY;
 
-public class ModelFragment extends Fragment {
+public class ModelFragment extends Fragment implements SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
 
     Unbinder unbinder;
     @Inject
@@ -55,16 +60,18 @@ public class ModelFragment extends Fragment {
     MainActivityViewModel mainActivityViewModel;
     @BindView(R.id.fragmentModels_list)
     RecyclerView fragmentModelsList;
-    @BindView(R.id.toolbar_backBtn)
-    ImageView toolbarBackBtn;
+
 
     private Summary summary = null;
+    private ModelAdapter modelAdapter;
+    private LinkedHashMap<String, String> models;
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_model, container, false);
+        setHasOptionsMenu(true);
         setRetainInstance(true);
         unbinder = ButterKnife.bind(this, view);
         bindViews();
@@ -89,7 +96,7 @@ public class ModelFragment extends Fragment {
                 setToolBarTitle(summary.getManufacture());
             } else {
                 mainActivityViewModel.modelResponse().observe(this, this::consumeResponse);
-                setToolBarTitle(FragmentVariables.MAIN_TYPES_FRAGMENT);
+                setToolBarTitle((summary.getManufacture()));
             }
         } else
             setToolBarTitle(FragmentVariables.MAIN_TYPES_FRAGMENT);
@@ -123,16 +130,16 @@ public class ModelFragment extends Fragment {
     private void renderManufacturersResponse(JsonElement response) {
         if (!response.isJsonNull()) {
             TypesResponse typesResponse = (TypesResponse) preferenceUtils.convertStringToObject(response.toString(), TypesResponse.class);
-            final LayoutAnimationController controller =
-                    AnimationUtils.loadLayoutAnimation(getContext(), R.anim.layout_animation_slide_right);
-
-            fragmentModelsList.setLayoutAnimation(controller);
-            fragmentModelsList.setAdapter(new ModelAdapter(typesResponse.getWkdaTypeMap(), getActivity(), (item, key) -> {
+            final LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(getContext(), R.anim.layout_animation_slide_right);
+            models = typesResponse.getWkdaTypeMap();
+            modelAdapter = new ModelAdapter(typesResponse.getWkdaTypeMap(), getActivity(), (item, key) -> {
                 Bundle bundle = new Bundle();
                 summary.setModel(item);
                 bundle.putParcelable(SUMMARY_OBJ_KEY, summary);
                 ((MainActivity) Objects.requireNonNull(getActivity())).selectFragment(FragmentVariables.BUILT_DATE_FRAGMENT, bundle);
-            }));
+            });
+            fragmentModelsList.setLayoutAnimation(controller);
+            fragmentModelsList.setAdapter(modelAdapter);
             fragmentModelsList.setLayoutManager(new LinearLayoutManager(getActivity()));
         }
     }
@@ -141,23 +148,79 @@ public class ModelFragment extends Fragment {
         mainActivityViewModel.hitModelApi(manufacture, page, pageSize, ResponseVariables.wa_key);
     }
 
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
     }
 
-    @OnClick(R.id.toolbar_backBtn)
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.toolbar_backBtn:
-                ((MainActivity) Objects.requireNonNull(getActivity())).onBackPressed();
-        }
-    }
-
     private void setToolBarTitle(String title) {
         ((MainActivity) Objects.requireNonNull(getActivity())).setToolBarTitle(title);
+    }
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+        inflater.inflate(R.menu.menu_model, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setOnQueryTextListener(this);
+        searchItem.setOnActionExpandListener(this);
+        searchView.setQueryHint("Search Model");
+
+        super.onCreateOptionsMenu(menu, inflater);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_search) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String s) {
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        if (newText == null || newText.trim().isEmpty()) {
+            resetAdapter();
+            return false;
+        }
+
+        LinkedHashMap<String, String> filteredValues = new LinkedHashMap<>(models);
+        Iterator it = models.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            if (!pair.getValue().toString().toLowerCase().contains(newText.toLowerCase())) {
+                filteredValues.remove(pair.getKey().toString());
+            }
+        }
+        modelAdapter.updateDataSet(filteredValues);
+        return false;
+    }
+
+    @Override
+    public boolean onMenuItemActionExpand(MenuItem menuItem) {
+        ((MainActivity) Objects.requireNonNull(getActivity())).toggleToolbarItemVisibility(View.GONE);
+        return true;
+    }
+
+    @Override
+    public boolean onMenuItemActionCollapse(MenuItem menuItem) {
+        ((MainActivity) Objects.requireNonNull(getActivity())).toggleToolbarItemVisibility(View.VISIBLE);
+        return true;
+    }
+
+    public void resetAdapter() {
+        if (modelAdapter != null)
+            modelAdapter.updateDataSet(models);
     }
 }
 

@@ -10,4 +10,6 @@
     <string name="dummy_manufacturer_name">Manufacturer</string>
     <string name="dummy_model_name">Model</string>
     <string name="dummy_year_name">Year</string>
+    <string name="action_search">Search</string>
+    <string name="search_hint">Type model</string>
 </resources>
