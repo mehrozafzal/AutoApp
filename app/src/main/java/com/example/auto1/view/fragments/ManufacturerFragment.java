@@ -72,11 +72,17 @@ public class ManufacturerFragment extends Fragment {
     private LinkedHashMap<String, String> manufacturersSet;
 
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+        manufacturersSet = new LinkedHashMap<>();
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_manufacturers, container, false);
-        setRetainInstance(true);
         unbinder = ButterKnife.bind(this, view);
         bindViews();
         return view;
@@ -90,9 +96,7 @@ public class ManufacturerFragment extends Fragment {
 
     private void bindViews() {
         layoutManager = new LinearLayoutManager(getContext());
-        manufacturersSet = new LinkedHashMap<>();
         recyclerScrollListener();
-
         ((MainActivity) Objects.requireNonNull(getActivity())).setToolBarTitle(FragmentVariables.MANUFACTURER_FRAGMENT);
         if (mainActivityViewModel == null) {
             ProgressDialogUtils.initProgressDialog(getContext(), "Fetching Manufacturers...");
@@ -100,8 +104,10 @@ public class ManufacturerFragment extends Fragment {
             mainActivityViewModel.manufacturerResponse().observe(this, this::consumeResponse);
             requestManufacturers(String.valueOf(PAGE), String.valueOf(PAGE_SIZE));
         } else {
-            PAGE = 1;
-            requestManufacturers(String.valueOf(1), String.valueOf(PAGE_SIZE));
+            setAdapterToManufacturer(manufacturersSet);
+            //manufacturerAdapter.notifyManufacturerAdapter(manufacturersSet);
+            //   PAGE = 1;
+            //  requestManufacturers(String.valueOf(1), String.valueOf(PAGE_SIZE));
         }
     }
 
@@ -115,7 +121,6 @@ public class ManufacturerFragment extends Fragment {
             case SUCCESS:
                 ProgressDialogUtils.dismissProgressDialog();
                 if (apiResponse.data != null) {
-                    ToastUtils.getInstance().showToast(getContext(), "Success", ToastDuration.LONG);
                     renderManufacturersResponse(apiResponse.data);
                 }
                 break;
@@ -139,17 +144,19 @@ public class ManufacturerFragment extends Fragment {
             if (PAGE == 1) {
                 final LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(getContext(), R.anim.layout_animation_slide_right);
                 fragmentManufacturersList.setLayoutAnimation(controller);
-                manufacturerAdapter = new ManufacturerAdapter(manufacturerResponse.getWkdaMap(), getActivity(), (item, key) -> {
-                    Bundle bundle = new Bundle();
-                    Summary summary = new Summary();
-                    summary.setManufacture(item);
-                    summary.setManufactureKey(key);
-                    bundle.putParcelable(SUMMARY_OBJ_KEY, summary);
-                    ((MainActivity) Objects.requireNonNull(getActivity())).selectFragment(FragmentVariables.MAIN_TYPES_FRAGMENT, bundle);
-                });
-                fragmentManufacturersList.setAdapter(manufacturerAdapter);
-                fragmentManufacturersList.setLayoutManager(layoutManager);
+//                manufacturerAdapter = new ManufacturerAdapter(manufacturerResponse.getWkdaMap(), getActivity(), (item, key) -> {
+//                    Bundle bundle = new Bundle();
+//                    Summary summary = new Summary();
+//                    summary.setManufacture(item);
+//                    summary.setManufactureKey(key);
+//                    bundle.putParcelable(SUMMARY_OBJ_KEY, summary);
+//                    ((MainActivity) Objects.requireNonNull(getActivity())).selectFragment(FragmentVariables.MAIN_TYPES_FRAGMENT, bundle);
+//                });
+//                fragmentManufacturersList.setAdapter(manufacturerAdapter);
+//                fragmentManufacturersList.setLayoutManager(layoutManager);
+
                 updateDataSet(manufacturerResponse.getWkdaMap());
+                setAdapterToManufacturer(manufacturersSet);
                 TOTAL_PAGE = manufacturerResponse.getTotalPageCount();
             } else {
                 if (manufacturerAdapter != null) {
@@ -165,6 +172,19 @@ public class ManufacturerFragment extends Fragment {
             if (!manufacturersSet.containsKey(e.getKey()))
                 manufacturersSet.put(e.getKey().toString(), e.getValue().toString());
         }
+    }
+
+    private void setAdapterToManufacturer(LinkedHashMap<String, String> manufacturers) {
+        manufacturerAdapter = new ManufacturerAdapter(manufacturers, getActivity(), (item, key) -> {
+            Bundle bundle = new Bundle();
+            Summary summary = new Summary();
+            summary.setManufacture(item);
+            summary.setManufactureKey(key);
+            bundle.putParcelable(SUMMARY_OBJ_KEY, summary);
+            ((MainActivity) Objects.requireNonNull(getActivity())).selectFragment(FragmentVariables.MAIN_TYPES_FRAGMENT, bundle);
+        });
+        fragmentManufacturersList.setAdapter(manufacturerAdapter);
+        fragmentManufacturersList.setLayoutManager(layoutManager);
     }
 
     private void requestManufacturers(String page, String pageSize) {
@@ -200,6 +220,7 @@ public class ManufacturerFragment extends Fragment {
             }
         });
     }
+
 
     @Override
     public void onDestroyView() {

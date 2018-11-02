@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.auto1.R;
@@ -20,23 +19,17 @@ import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public class SummaryFragment extends Fragment {
 
     Unbinder unbinder;
-    @BindView(R.id.toolbar_backBtn)
-    ImageView toolbarBackBtn;
     @BindView(R.id.fragmentSummary_manufactureTextView)
     TextView fragmentSummaryManufactureTextView;
     @BindView(R.id.fragmentSummary_modelText)
     TextView fragmentSummaryModelText;
     @BindView(R.id.fragmentSummary_yearText)
     TextView fragmentSummaryYearText;
-
-
-    private Summary summary;
 
     @Nullable
     @Override
@@ -49,10 +42,11 @@ public class SummaryFragment extends Fragment {
     }
 
     private void bindViews() {
-        setToolBarTitle(FragmentVariables.SUMMARY_FRAGMENT);
+        setToolBarTitle();
         Bundle bundle = getArguments();
         if (bundle != null) {
-            summary = bundle.getParcelable(ActivityVariables.Keys.SUMMARY_OBJ_KEY);
+            Summary summary = bundle.getParcelable(ActivityVariables.Keys.SUMMARY_OBJ_KEY);
+            assert summary != null;
             fragmentSummaryManufactureTextView.setText(summary.getManufacture());
             fragmentSummaryModelText.setText(summary.getModel());
             fragmentSummaryYearText.setText(summary.getYear());
@@ -66,16 +60,8 @@ public class SummaryFragment extends Fragment {
         unbinder.unbind();
     }
 
-    private void setToolBarTitle(String title) {
-        ((MainActivity) Objects.requireNonNull(getActivity())).setToolBarTitle(title);
+    private void setToolBarTitle() {
+        ((MainActivity) Objects.requireNonNull(getActivity())).setToolBarTitle(FragmentVariables.SUMMARY_FRAGMENT);
     }
 
-
-    @OnClick(R.id.toolbar_backBtn)
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.toolbar_backBtn:
-                ((MainActivity) Objects.requireNonNull(getActivity())).onBackPressed();
-        }
-    }
 }

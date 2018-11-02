@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
-import android.widget.ImageView;
 
 import com.example.auto1.MyApplication;
 import com.example.auto1.R;
@@ -40,7 +39,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
 
 import static com.example.auto1.constants.ActivityVariables.Keys.SUMMARY_OBJ_KEY;
@@ -55,8 +53,6 @@ public class YearFragment extends Fragment {
     MainActivityViewModel mainActivityViewModel;
     @BindView(R.id.fragmentYears_list)
     RecyclerView fragmentYearsList;
-    @BindView(R.id.toolbar_backBtn)
-    ImageView toolbarBackBtn;
     private Summary summary;
 
     @Nullable
@@ -142,15 +138,6 @@ public class YearFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-    }
-
-    @OnClick(R.id.toolbar_backBtn)
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.toolbar_backBtn:
-                ((MainActivity) Objects.requireNonNull(getActivity())).onBackPressed();
-
-        }
     }
 
     private void setToolBarTitle(String title) {

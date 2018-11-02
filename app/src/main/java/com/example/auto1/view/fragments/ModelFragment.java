@@ -52,16 +52,17 @@ import static com.example.auto1.constants.ActivityVariables.Keys.SUMMARY_OBJ_KEY
 
 public class ModelFragment extends Fragment implements SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
 
-    Unbinder unbinder;
+
     @Inject
     ViewModelFactory viewModelFactory;
     @Inject
     PreferenceUtils preferenceUtils;
-    MainActivityViewModel mainActivityViewModel;
+
     @BindView(R.id.fragmentModels_list)
     RecyclerView fragmentModelsList;
 
-
+    Unbinder unbinder;
+    private MainActivityViewModel mainActivityViewModel;
     private Summary summary = null;
     private ModelAdapter modelAdapter;
     private LinkedHashMap<String, String> models;
@@ -92,7 +93,7 @@ public class ModelFragment extends Fragment implements SearchView.OnQueryTextLis
                 ProgressDialogUtils.initProgressDialog(getContext(), "Fetching Models...");
                 mainActivityViewModel = ViewModelProviders.of(this, viewModelFactory).get(MainActivityViewModel.class);
                 mainActivityViewModel.modelResponse().observe(this, this::consumeResponse);
-                requestModels(summary.getManufactureKey(), "1", "10");
+                requestModels(summary.getManufactureKey());
                 setToolBarTitle(summary.getManufacture());
             } else {
                 mainActivityViewModel.modelResponse().observe(this, this::consumeResponse);
@@ -144,8 +145,8 @@ public class ModelFragment extends Fragment implements SearchView.OnQueryTextLis
         }
     }
 
-    private void requestModels(String manufacture, String page, String pageSize) {
-        mainActivityViewModel.hitModelApi(manufacture, page, pageSize, ResponseVariables.wa_key);
+    private void requestModels(String manufacture) {
+        mainActivityViewModel.hitModelApi(manufacture, "1", "10", ResponseVariables.wa_key);
     }
 
     @Override
@@ -195,9 +196,8 @@ public class ModelFragment extends Fragment implements SearchView.OnQueryTextLis
         }
 
         LinkedHashMap<String, String> filteredValues = new LinkedHashMap<>(models);
-        Iterator it = models.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry) it.next();
+        for (Object o : models.entrySet()) {
+            Map.Entry pair = (Map.Entry) o;
             if (!pair.getValue().toString().toLowerCase().contains(newText.toLowerCase())) {
                 filteredValues.remove(pair.getKey().toString());
             }
