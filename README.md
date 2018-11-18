@@ -1,5 +1,5 @@
 # AutoApp
-# Sample application for demonstration purpose.
+# MVVM-Rxjava2-LiveData-Retrofit2-Dagger
 
 A sample app to demonstrate the usage of 
 MVVM, Rxjava2, LiveData, Retrofit2, Dagger.
